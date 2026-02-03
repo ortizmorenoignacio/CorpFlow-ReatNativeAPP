@@ -1,0 +1,6 @@
+PUT  http://localhost:3001/api/Chats/695f97e07ea456d03e126fdc
+Content-Type: application/json
+
+{
+    "corporacion": "695a45494425fe76fe5a4f6b"  
+}

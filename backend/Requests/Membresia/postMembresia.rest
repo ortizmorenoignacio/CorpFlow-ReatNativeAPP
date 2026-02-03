@@ -1,0 +1,10 @@
+POST  http://localhost:3001/api/membresias/
+Content-Type: application/json
+
+{
+    "rol": "ADMIN",
+    "corporacion": "695a45494425fe76fe5a4f6b",
+    "usuario": "69404242c3192c30d5cc7a6c"
+    
+    
+}

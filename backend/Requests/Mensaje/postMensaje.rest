@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/mensajes
+Content-Type: application/json
+
+{
+    "contenido": "Hola bienvenidos al grupo",
+    "chat": "695f97e07ea456d03e126fdc",
+    "usuario": "69404242c3192c30d5cc7a6c"
+}

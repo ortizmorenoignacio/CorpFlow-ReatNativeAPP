@@ -1,0 +1,8 @@
+POST  http://localhost:3001/api/chats/
+Content-Type: application/json
+
+{
+    "nombre": "Chat Oficial Deloitte",
+    "corporacion": "695a45494425fe76fe5a4f6b"
+    
+}

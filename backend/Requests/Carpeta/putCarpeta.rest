@@ -1,0 +1,6 @@
+PUT  http://localhost:3001/api/Carpetas/6960d883dc40ffccea3e03ee
+Content-Type: application/json
+
+{
+    "nombre": "Recursos Humanos"  
+}

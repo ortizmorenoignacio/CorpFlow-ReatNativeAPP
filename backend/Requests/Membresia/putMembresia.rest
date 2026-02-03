@@ -1,0 +1,8 @@
+PUT  http://localhost:3001/api/membresias/6960f4d611a324da0fa8ce84
+Content-Type: application/json
+
+{
+    "rol": "MIEMBRO"
+    
+    
+}

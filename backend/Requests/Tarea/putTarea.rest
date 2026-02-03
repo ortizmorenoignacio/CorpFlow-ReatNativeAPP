@@ -1,0 +1,6 @@
+PUT  http://localhost:3001/api/tareas/69579614a52081e6db24cc4a
+Content-Type: application/json
+
+{
+    "nombre": "Reunion Marcelo"
+}

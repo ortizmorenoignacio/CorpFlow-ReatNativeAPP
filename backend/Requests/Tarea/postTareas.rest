@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/tareas
+Content-Type: application/json
+
+{
+    "nombre": "Terminar la documentación del TFG",
+    "prioridad": "ALTA",
+    "fechaInicio": "2025-10-01",
+    "fechaVencimiento": "2025-10-15",
+    "estadoTarea": false,
+    "usuario": "69404242c3192c30d5cc7a6c"
+}

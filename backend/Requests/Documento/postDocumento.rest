@@ -1,0 +1,9 @@
+POST  http://localhost:3001/api/documentos/
+Content-Type: application/json
+
+{
+    "nombre": "Politicas",
+    "formato": "docx",
+    "carpeta": "6960de5df4b41134c463e219"
+    
+}

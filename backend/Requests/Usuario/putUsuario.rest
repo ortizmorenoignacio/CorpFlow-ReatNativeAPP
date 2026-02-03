@@ -1,0 +1,13 @@
+PUT  http://localhost:3001/api/usuario/69404242c3192c30d5cc7a6c
+Content-Type: application/json
+
+{
+    "nombre" : "Jesus Moreno",
+    "correo" : "jesuspru@gmail.com",
+    "telefono": "654321123",
+    "fotoPerfil": "https://example.com/foto.jpg",
+    "fechaNacimiento": "1990-05-15",
+    "contraseña": "jesuss",
+    "dni": "45634590A",
+    "genero": "HOMBRE"
+}

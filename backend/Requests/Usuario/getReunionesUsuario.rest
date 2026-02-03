@@ -1,0 +1,1 @@
+GET http://localhost:3001/api/usuario/69404242c3192c30d5cc7a6c/reuniones

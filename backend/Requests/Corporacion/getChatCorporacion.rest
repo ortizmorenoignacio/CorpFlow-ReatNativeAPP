@@ -1,0 +1,2 @@
+
+GET http://localhost:3001/api/corporaciones/695a45494425fe76fe5a4f6b/chat

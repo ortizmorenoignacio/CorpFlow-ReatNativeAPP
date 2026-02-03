@@ -1,0 +1,1 @@
+GET http://localhost:3001/api/reuniones/69405ffdb6d578d8ebce0e6c/asistentes

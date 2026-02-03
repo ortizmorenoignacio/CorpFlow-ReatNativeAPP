@@ -1,0 +1,6 @@
+PUT http://localhost:3001/api/mensajes/6960fef8b1a7eccbd2653009
+Content-Type: application/json
+
+{
+    "contenido": "Hola a todos que tengais un buen dia"
+}

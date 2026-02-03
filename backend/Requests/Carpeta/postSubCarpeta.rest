@@ -1,0 +1,9 @@
+POST  http://localhost:3001/api/carpetas/
+Content-Type: application/json
+
+{
+    "nombre": "Politicas Actualizadas",
+    "carpetaPadre": "6960d883dc40ffccea3e03ee"
+    
+    
+}

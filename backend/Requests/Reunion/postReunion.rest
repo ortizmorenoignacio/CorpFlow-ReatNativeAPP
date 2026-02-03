@@ -1,0 +1,13 @@
+POST http://localhost:3001/api/reuniones
+Content-Type: application/json
+
+{
+    "nombre": "Reunión de Marketing",
+    "fecha_Inicio": "2025-12-20",
+    "horaInicio": "2025-12-20T10:00:00.000Z",
+    "horaFin": "2025-12-20T11:00:00.000Z",
+    "asistentes": [
+        "jesuspru@gmail.com"
+    ]
+}
+

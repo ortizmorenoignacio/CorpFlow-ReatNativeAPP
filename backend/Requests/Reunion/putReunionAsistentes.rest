@@ -1,0 +1,6 @@
+PUT  http://localhost:3001/api/reuniones/6954f67fbf1aed11849604e3
+Content-Type: application/json
+
+{
+    "asistentes": ["692eba627845d9f2eed3d5b1"]
+}

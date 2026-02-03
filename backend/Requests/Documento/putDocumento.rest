@@ -1,0 +1,6 @@
+PUT  http://localhost:3001/api/Documentos/6960e9e56c9330a11a6c5cc9
+Content-Type: application/json
+
+{
+    "nombre": "Archivo Politicas Internas"  
+}
