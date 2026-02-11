@@ -1,12 +1,17 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 
+import { StyleSheet, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import Constants from "expo-constants";
+import { Main } from "./src/components/Main";
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Tenemos aqui la app</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <Main />
+      </View>
+    </SafeAreaProvider>
   );
 }
 
@@ -16,5 +21,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 12,
   },
 });
