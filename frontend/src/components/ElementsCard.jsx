@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 import { Link } from "expo-router";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-export function ElementsCard({ corporacionId }) {
+export function ElementsCard({ corporacionId, chatId }) {
   const menuItems = [
     {
       id: 1,
@@ -24,7 +24,7 @@ export function ElementsCard({ corporacionId }) {
       name: "Chat",
       bg: "#FFF3E0",
       color: "#FF9800",
-      link: `/chat/${corporacionId}`,
+      link: `/chat/${chatId}`,
       icono: "comment",
     },
     {

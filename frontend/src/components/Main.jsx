@@ -1,20 +1,25 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, ActivityIndicator, View } from "react-native";
-import { obtenerUsuarios } from "../api/services/usuarioService";
+
+import { ScrollView, View, Text } from "react-native";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ElementsCard } from "./ElementsCard";
+import { Screen } from "./Screen";
 export function Main() {
-  const insets = useSafeAreaInsets(); //HOOK para tener los espacios por arriba y abajo
   const empresa = {
     id: "695a45494425fe76fe5a4f6b",
+    nombre: "Deloitte",
+    chat: "695f97e07ea456d03e126fdc",
   };
   return (
-    <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
+    <Screen>
       <ScrollView>
         <StatusBar style="auto" />
-        <ElementsCard corporacionId={empresa.id}></ElementsCard>
+        <ElementsCard
+          corporacionId={empresa.id}
+          chatId={empresa.chat}
+        ></ElementsCard>
       </ScrollView>
-    </View>
+    </Screen>
   );
 }
