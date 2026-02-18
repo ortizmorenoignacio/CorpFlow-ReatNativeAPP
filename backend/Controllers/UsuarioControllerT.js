@@ -1,6 +1,8 @@
 const { request, response } = require("express");
 const Usuario = require("../Models/usuario");
-
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+const moment = require("moment");
 // Obtener Usuarios
 
 exports.obtenerUsuarios = async (request, response) => {
@@ -84,13 +86,16 @@ exports.crearUsuario = async (request, response) => {
         .status(400)
         .json({ error: "Ya existe un usuario con ese dni" });
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(usuario.contraseña, salt);
     const newUser = new Usuario({
       nombre: usuario.nombre,
       correo: usuario.correo,
       telefono: usuario.telefono,
       fotoPerfil: usuario.fotoPerfil,
       fechaNacimiento: usuario.fechaNacimiento,
-      contrasena: usuario.contraseña,
+      contraseña: hashPassword,
       dni: usuario.dni,
       genero: usuario.genero,
     });
@@ -139,5 +144,45 @@ exports.eliminarUsuarioID = async (request, response) => {
     response.json({ Info: "Usuario borrado correctamente" });
   } catch (error) {
     response.status(500).json({ error: "Error al borrar usuario" });
+  }
+};
+
+//LOGIN
+
+exports.login = async (request, response) => {
+  try {
+    const { email, password } = request.body;
+
+    const usuario = await Usuario.findOne({ correo: email });
+
+    if (!usuario) {
+      return res.status(401).json({ error: "Credenciales no válidas" });
+    }
+
+    const passwordValid = await bcrypt.compare(password, usuario.contraseña);
+
+    if (!passwordValid) {
+      return res.status(401).json({ error: "Credenciales inválidas" });
+    }
+
+    const token = crypto.randomBytes(20).toString("hex");
+    const tokenExpiration = moment().add(1, "hour").toDate();
+
+    usuario.token = token;
+    usuario.tokenExpiration = tokenExpiration;
+    await usuario.save();
+
+    const userResponse = usuario.toObject();
+    delete userResponse.contraseña;
+
+    response.json({
+      token: token,
+      user: userResponse,
+    });
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .json({ error: "Error en el servidor al iniciar sesión" });
   }
 };

@@ -1,12 +1,47 @@
-import { View, Text, TextInput, Button, Pressable } from "react-native";
+import { View, Text, TextInput, Button, Pressable, Alert } from "react-native";
 import { Screen } from "../src/components/Screen";
 import { Stack, useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { useAuth } from "../src/context/AuthContext";
+import { login } from "../src/api/AuthEndpoints";
 export default function LoginScreen() {
-  const [username, setUsername] = useState("");
+  const { signIn, user, loading } = useAuth();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  //Bloquear el boton mientras carga
+  const [cargando, setCargando] = useState(false);
+  //Comprobamos si esta logeado, si lo esta pasamos a la pantalla principal
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace("/(tabs)");
+    }
+  }, [user, loading]);
+
+  const manejoLogin = async () => {
+    //Validaciones
+    if (email === "" || password === "") {
+      Alert.alert("Error", "Porfavor rellena todos los campos");
+      return;
+    }
+
+    setCargando(true);
+    try {
+      const response = await login({
+        email: email,
+        password: password,
+      });
+
+      await signIn(response.user, response.token);
+    } catch (error) {
+      Alert.alert("Error de inicio de sesión", error.message);
+    } finally {
+      setCargando(false);
+    }
+  };
   return (
     <Screen>
       <View className="flex-1  justify-center p-5">
@@ -20,12 +55,12 @@ export default function LoginScreen() {
           </Text>
         </View>
         <View>
-          <Text className="text-base font-bold mb-3">Usuario</Text>
+          <Text className="text-base font-bold mb-3">Correo Electrónico</Text>
           <TextInput
             placeholder="Nombre de Usuario"
             className="border border-gray-300 p-4 mb-5 rounded-lg"
-            value={username}
-            onChangeText={setUsername}
+            value={email}
+            onChangeText={setEmail}
           ></TextInput>
           <Text className="text-base font-bold mb-3">Contraseña</Text>
           <TextInput
@@ -37,10 +72,10 @@ export default function LoginScreen() {
           ></TextInput>
           <Pressable
             className="bg-cyan-700 rounded-xl active:opacity-80 p-4"
-            onPress={() => {}}
+            onPress={manejoLogin}
           >
             <Text className="text-center text-white font-bold">
-              Iniciar Sesión
+              {cargando ? "Cargando" : "Iniciar Sesión"}
             </Text>
           </Pressable>
           <View className="mt-6 flex-row justify-center">
