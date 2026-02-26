@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 // Aquí asumo que tus iconos funcionan. Si te da error, comenta esta línea y los iconos de abajo temporalmente.
 import {
   User,
@@ -9,6 +9,7 @@ import {
 } from "../../src/components/Icons";
 
 import { View } from "react-native";
+import { useAuth } from "../../src/context/AuthContext";
 
 export default function TabsLayout() {
   return (

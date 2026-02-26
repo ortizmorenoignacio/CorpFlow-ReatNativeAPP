@@ -9,7 +9,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); //Datos del usuario
   const [token, setToken] = useState(null); //Token
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   //Comprobamos si hay una sesion guardada
 
@@ -18,13 +18,23 @@ export const AuthProvider = ({ children }) => {
       try {
         const usuarioGuardado = await AsyncStorage.getItem("user");
         const tokenGuardado = await AsyncStorage.getItem("token");
+        const fechaExpiracion = await AsyncStorage.getItem("expiracion");
+        if (usuarioGuardado && tokenGuardado && fechaExpiracion) {
+          const ahoraMismo = new Date();
+          const limite = new Date(fechaExpiracion);
+          if (ahoraMismo > limite) {
+            console.log("La sesión ha expirado");
 
-        if (usuarioGuardado && tokenGuardado) {
-          setUser(JSON.parse(usuarioGuardado));
-          setToken(tokenGuardado);
+            await AsyncStorage.multiRemove(["user", "token", "expiracion"]);
+          } else {
+            setUser(JSON.parse(usuarioGuardado));
+            setToken(tokenGuardado);
+          }
         }
       } catch (error) {
         console.error("Error cargando sesion", error);
+      } finally {
+        setLoading(false);
       }
     };
     loadSession();
@@ -37,10 +47,15 @@ export const AuthProvider = ({ children }) => {
       //Guardamos los estados
       setUser(userData);
       setToken(userToken);
+
+      //Calculamos la fecha de caducidad
+      const fechaCaducidad = new Date();
+      fechaCaducidad.setHours(fechaCaducidad.getHours() + 2);
       // Guardamos en el movil (PERSISTENCIA)
 
       await AsyncStorage.setItem("user", JSON.stringify(userData));
       await AsyncStorage.setItem("token", userToken);
+      await AsyncStorage.setItem("expiracion", fechaCaducidad.toISOString());
     } catch (error) {
       console.error("Error guardando sesion", error);
     }
@@ -56,8 +71,7 @@ export const AuthProvider = ({ children }) => {
 
       //Borramos del movil
 
-      await AsyncStorage.removeItem("user");
-      await AsyncStorage.removeItem("token");
+      await AsyncStorage.multiRemove(["user", "token", "expiracion"]);
     } catch (error) {
       console.error("Error cerrando sesión:", error);
     }
