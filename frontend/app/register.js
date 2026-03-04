@@ -1,4 +1,6 @@
 import {
+  ActivityIndicator,
+  Alert,
   Platform,
   Pressable,
   ScrollView,
@@ -11,6 +13,8 @@ import { router, Stack } from "expo-router";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { CalendarForm } from "../src/components/Icons";
+
+import { registrarUsuario } from "../src/api/services/usuarioService";
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
@@ -18,11 +22,12 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [dni, setDni] = useState("");
-
+  const [telefono, setTelefono] = useState("");
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [fechaTexto, setFechaTexto] = useState("");
 
+  const [cargando, setCargando] = useState(false);
   const seleccionFecha = (event, fechaSeleccionada) => {
     if (Platform.OS === "android") {
       setShowPicker(false);
@@ -38,11 +43,64 @@ export default function RegisterScreen() {
       setFechaTexto(formateo);
     }
   };
+
+  const handleRegister = async () => {
+    //Validamos los campos vacios
+    if (
+      !username ||
+      !email ||
+      !password ||
+      !dni ||
+      !telefono ||
+      !date ||
+      !fechaTexto
+    ) {
+      alert("Porfavor, rellena todos los campos");
+      return;
+    }
+
+    try {
+      setCargando(true);
+
+      const datos = {
+        nombre: username,
+        correo: email.toLocaleLowerCase().trim(),
+        telefono: telefono.toString(),
+        dni: dni.toLocaleUpperCase(),
+        fechaNacimiento: date.toISOString(),
+        contraseña: password,
+        genero: "OTRO",
+        fotoPerfil:
+          "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
+      };
+
+      await registrarUsuario(datos);
+
+      Alert.alert(
+        "¡Éxito!", // Título
+        "Usuario creado correctamente. Pulsa OK para iniciar sesión.", // Mensaje (String)
+        [{ text: "OK", onPress: () => router.replace("/login") }], // Botones (Array)
+      );
+    } catch (error) {
+      if (error.response) {
+        // El servidor respondió con un código de error (400, 401, 500...)
+        console.log("❌ Datos de error del servidor:", error.response.data);
+        alert("Error: " + JSON.stringify(error.response.data));
+      } else if (error.request) {
+        // La petición se hizo pero no hubo respuesta
+        alert("No hubo respuesta del servidor. ¿Está encendido?");
+      } else {
+        alert("Error de configuración: " + error.message);
+      }
+    } finally {
+      setCargando(false);
+    }
+  };
   return (
     <Screen>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
-        className="p-5"
+        className="p-5 mb-10"
       >
         <Stack.Screen options={{ headerShown: false }} />
         <View className="mb-10 mt-5">
@@ -53,8 +111,8 @@ export default function RegisterScreen() {
             Crea tu cuenta
           </Text>
         </View>
-        <View>
-          <Text className="text-base font-bold mb-3">Nombre</Text>
+        <View className="mb-10">
+          {/* <Text className="text-base font-bold mb-3">Nombre</Text>
           <TextInput
             placeholder="Nombre"
             className="border border-gray-300 p-4 mb-5 rounded-lg"
@@ -68,7 +126,7 @@ export default function RegisterScreen() {
             className="border border-gray-300 p-4 mb-5 rounded-lg"
             value={apellidos}
             onChangeText={setApellidos}
-          ></TextInput>
+          ></TextInput> */}
 
           <Text className="text-base font-bold mb-3">Usuario</Text>
           <TextInput
@@ -86,6 +144,14 @@ export default function RegisterScreen() {
             className="border border-gray-300 p-4 mb-5 rounded-lg"
             value={email}
             onChangeText={setEmail}
+          ></TextInput>
+          <Text className="text-base font-bold mb-3">Telefono</Text>
+          <TextInput
+            placeholder="123456789"
+            className="border border-gray-300 p-4 mb-5 rounded-lg"
+            keyboardType="numeric"
+            value={telefono}
+            onChangeText={setTelefono}
           ></TextInput>
 
           <Text className="text-base font-bold mb-3">DNI /NIE</Text>
@@ -131,23 +197,18 @@ export default function RegisterScreen() {
           />
           <Pressable
             className="bg-cyan-700 rounded-xl active:opacity-80 p-4 mb-3"
-            onPress={() => {
-              console.log("Datos:", {
-                username,
-                name,
-                apellidos,
-                email,
-                password,
-                dni,
-                fechaTexto,
-              });
-            }}
+            onPress={handleRegister}
+            disabled={cargando}
           >
-            <Text className="text-center text-white font-bold text-base">
-              Registrarse
-            </Text>
+            {cargando ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text className="text-center text-white font-bold text-base">
+                Registrarse
+              </Text>
+            )}
           </Pressable>
-          <View className="mt-3 flex-row justify-center mb-4">
+          <View className="mt-3 flex-row justify-center mb-10">
             <Text className="text-gray-500">¿Ya tienes cuenta? </Text>
             <Pressable
               className="active:opacity-50"

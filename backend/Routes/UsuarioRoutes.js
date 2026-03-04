@@ -12,4 +12,7 @@ router.put("/:id", usuarioController.actualizarUsuario);
 router.delete("/:id", usuarioController.eliminarUsuarioID);
 router.post("/login", usuarioController.login);
 
+//EXTRAS
+
+router.get("/:id/membresias", usuarioController.obtenerMembresiasUsuario);
 module.exports = router;

@@ -64,6 +64,7 @@ exports.obtenerReunionesUsuario = async (request, response) => {
 
 exports.crearUsuario = async (request, response) => {
   try {
+    console.log("Cuerpo recibido:", request.body);
     const usuario = request.body;
     const dni = usuario.dni;
     const usuarioExiste = await Usuario.findOne({ dni });
@@ -184,5 +185,37 @@ exports.login = async (request, response) => {
     response
       .status(500)
       .json({ error: "Error en el servidor al iniciar sesión" });
+  }
+};
+
+//EXTRAS
+
+exports.obtenerMembresiasUsuario = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const usuario = await Usuario.findById(id).populate({
+      path: "membresias",
+      populate: {
+        path: "corporacion",
+        model: "Corporacion",
+      },
+    });
+    const membresias = usuario.membresias;
+    if (usuario) {
+      if (membresias.length != 0) {
+        response.json(membresias);
+      } else {
+        response.json({
+          Info: "El usuario no tiene pertenece a ninguna corporacion",
+        });
+      }
+    } else {
+      response.status(404).json({ error: "Usuario no encontrado" });
+    }
+  } catch (error) {
+    response
+      .status(500)
+      .json({ error: "Error al obtener membresias de un usuario por su id" });
+    console.log(error);
   }
 };
