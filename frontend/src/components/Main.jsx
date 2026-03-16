@@ -5,19 +5,26 @@ import { ScrollView, View, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ElementsCard } from "./ElementsCard";
 import { Screen } from "./Screen";
+import { useCorporacion } from "../context/CorporacionContext";
 export function Main() {
-  const empresa = {
-    id: "695a45494425fe76fe5a4f6b",
-    nombre: "Deloitte",
-    chat: "695f97e07ea456d03e126fdc",
-  };
+  const { corporacionActiva } = useCorporacion();
+
+  if (!corporacionActiva) {
+    return (
+      <Screen>
+        <View className="flex-1 justify-center items-center">
+          <Text>Por favor, selecciona una corporacion primero.</Text>
+        </View>
+      </Screen>
+    );
+  }
   return (
     <Screen>
       <ScrollView>
         <StatusBar style="auto" />
         <ElementsCard
-          corporacionId={empresa.id}
-          chatId={empresa.chat}
+          corporacionId={corporacionActiva.id}
+          chatId={corporacionActiva.chat}
         ></ElementsCard>
       </ScrollView>
     </Screen>

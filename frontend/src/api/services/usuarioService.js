@@ -13,3 +13,7 @@ export const registrarUsuario = async (datosUsuario) => {
 export const obtenerMembresiasUsuario = async (userId) => {
   return await get(`/api/usuario/${userId}/membresias`);
 };
+
+export const obtenerTareasUsuarioCorporacion = async (userId, corpId) => {
+  return await get(`/api/usuario/${userId}/corporacion/${corpId}/tareas`);
+};

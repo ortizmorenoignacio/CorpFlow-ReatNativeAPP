@@ -27,3 +27,13 @@ export const post = async (url, data) => {
     throw error;
   }
 };
+
+export const put = async (url, data) => {
+  try {
+    const response = await client.put(url, data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error en el PUT ${url}`, error);
+    throw error;
+  }
+};

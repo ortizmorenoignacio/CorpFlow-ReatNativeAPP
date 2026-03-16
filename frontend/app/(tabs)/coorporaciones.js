@@ -1,7 +1,8 @@
-import { View, Text } from "react-native";
-import { Screen } from "../../src/components/Screen"; // O tu componente contenedor
+import { View, Text, Pressable } from "react-native";
+import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/context/AuthContext";
 import { CorporacionesList } from "../../src/components/CorporacionesList";
+import { router } from "expo-router";
 
 // ¡IMPORTANTE! Tiene que ser 'export default'
 export default function CoorporacionesScreen() {
@@ -15,6 +16,17 @@ export default function CoorporacionesScreen() {
         </Text>
 
         <CorporacionesList userId={user?._id} />
+        <View className="mt-6 flex-row justify-center">
+          <Text className="text-gray-500">
+            ¿Quiere crear una nueva corporacion?{" "}
+          </Text>
+          <Pressable
+            className="active:opacity-50"
+            onPress={() => router.push("/formCorporacion")}
+          >
+            <Text className="text-cyan-700 font-semibold">Crear</Text>
+          </Pressable>
+        </View>
       </View>
     </Screen>
   );

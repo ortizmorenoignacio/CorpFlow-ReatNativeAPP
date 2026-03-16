@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/corporaciones/695a45494425fe76fe5a4f6b/membresias
+GET http://localhost:3001/api/corporaciones/69af0b80f90c821110c52cdc/membresias

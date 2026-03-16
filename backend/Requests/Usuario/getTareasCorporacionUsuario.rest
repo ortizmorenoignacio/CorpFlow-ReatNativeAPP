@@ -1,0 +1,1 @@
+GET http://localhost:3001/api/usuario/69a6bd223cdc7aa584d5fe82/corporacion/69af0b80f90c821110c52cdc/tareas

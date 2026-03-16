@@ -1,5 +1,8 @@
 const { request, response } = require("express");
 const Usuario = require("../Models/usuario");
+const Tareas = require("../Models/tareas");
+
+const Membresia = require("../Models/membresia");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const moment = require("moment");
@@ -217,5 +220,39 @@ exports.obtenerMembresiasUsuario = async (request, response) => {
       .status(500)
       .json({ error: "Error al obtener membresias de un usuario por su id" });
     console.log(error);
+  }
+};
+
+exports.obtenerTareasUsuarioCorporacion = async (request, response) => {
+  try {
+    const { idCorp, idUser } = request.params;
+
+    const membresiaValida = await Membresia.findOne({
+      usuario: idUser,
+      corporacion: idCorp,
+    });
+
+    if (!membresiaValida) {
+      return response.status(403).json({
+        error: "Acceso denegado. No tienes permisos en esta corporacion",
+      });
+    }
+
+    const tareasDelUsuario = await Tareas.find({
+      usuario: idUser,
+      corporacion: idCorp,
+    }).sort({ fechaVencimiento: 1 });
+
+    if (!tareasDelUsuario || tareasDelUsuario.length === 0) {
+      return response.json([]);
+    }
+
+    response.json(tareasDelUsuario);
+  } catch (error) {
+    console.error("Error al obtener las tareas del usuario:", error);
+    response.status(500).json({
+      error: "Error al obtener las tareas",
+      detalle: error.message,
+    });
   }
 };

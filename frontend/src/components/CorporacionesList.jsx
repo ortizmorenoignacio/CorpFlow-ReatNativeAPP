@@ -3,8 +3,12 @@ import { obtenerMembresiasUsuario } from "../api/services/usuarioService";
 import { ActivityIndicator, FlatList } from "react-native";
 import { MembresiaCard } from "./MembresiasCard";
 import { Screen } from "./Screen";
+import { useCorporacion } from "../context/CorporacionContext";
+import { useRouter } from "expo-router";
 
 export const CorporacionesList = ({ userId }) => {
+  const { seleccionarCorporacion } = useCorporacion();
+  const router = useRouter();
   const [membresias, setMembresias] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,6 +30,16 @@ export const CorporacionesList = ({ userId }) => {
 
   if (loading) return <ActivityIndicator className="mt-10" color="0e7490" />;
 
+  const handleSelect = (item) => {
+    seleccionarCorporacion({
+      id: item.corporacion._id,
+      nombre: item.corporacion.nombre,
+      chat: item.corporacion.chat,
+      logo: item.corporacion.logo,
+    });
+
+    router.replace("/(tabs)");
+  };
   return (
     <Screen>
       <FlatList
@@ -36,9 +50,7 @@ export const CorporacionesList = ({ userId }) => {
             nombre={item.corporacion?.nombre}
             logo={item.corporacion?.logo}
             rol={item.rol}
-            onPress={() =>
-              console.log("Seleccionada:", item.corporacion?.nombre)
-            }
+            onPress={() => handleSelect(item)}
           ></MembresiaCard>
         )}
       ></FlatList>

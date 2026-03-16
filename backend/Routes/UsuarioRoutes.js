@@ -15,4 +15,8 @@ router.post("/login", usuarioController.login);
 //EXTRAS
 
 router.get("/:id/membresias", usuarioController.obtenerMembresiasUsuario);
-module.exports = router;
+(router.get(
+  "/:idUser/corporacion/:idCorp/tareas",
+  usuarioController.obtenerTareasUsuarioCorporacion,
+),
+  (module.exports = router));

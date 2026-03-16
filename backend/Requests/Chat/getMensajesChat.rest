@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/chats/695f97e07ea456d03e126fdc/mensajes
+GET http://localhost:3001/api/chats/69af0b80f90c821110c52cde/mensajes

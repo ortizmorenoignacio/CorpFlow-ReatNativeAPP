@@ -2,10 +2,11 @@ POST http://localhost:3001/api/tareas
 Content-Type: application/json
 
 {
-    "nombre": "Terminar la documentación del TFG",
+    "nombre": "Captar nuevos clientes para Sevilla Technology",
     "prioridad": "ALTA",
-    "fechaInicio": "2025-10-01",
-    "fechaVencimiento": "2025-10-15",
+    "fechaInicio": "2025-03-10",
+    "fechaVencimiento": "2025-05-05",
     "estadoTarea": false,
-    "usuario": "69404242c3192c30d5cc7a6c"
+    "usuario": "69a6bd223cdc7aa584d5fe82",
+    "corporacion": "69af0b80f90c821110c52cdc"
 }
