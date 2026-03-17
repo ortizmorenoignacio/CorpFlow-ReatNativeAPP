@@ -40,3 +40,15 @@ export const PhoneIcon = (props) => (
 export const DniIcon = (props) => (
   <FontAwesome5 name="id-card" size={24} color={props.color} {...props} />
 );
+
+export const PrivacidadIcon = (props) => (
+  <FontAwesome5 name="shield-alt" size={24} color={props.color} />
+);
+
+export const InterrrogacionIcon = (props) => (
+  <FontAwesome5 name="question-circle" size={24} color="black" />
+);
+
+export const CloudIcon = (props) => (
+  <FontAwesome5 name="cloud-sun" size={24} color="black" />
+);

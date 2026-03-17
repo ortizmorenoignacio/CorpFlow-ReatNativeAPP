@@ -16,7 +16,7 @@ export default function Tareas() {
         options={{
           headerShown: true,
           headerTitle: () => (
-            <Text className="text-3xl font-bold text-cyan-700 ml-3 text-">
+            <Text className="text-3xl font-bold text-cyan-700 ml-3 ">
               Lista de Tareas
             </Text>
           ),

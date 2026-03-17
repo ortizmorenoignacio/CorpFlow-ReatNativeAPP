@@ -73,6 +73,13 @@ export default function TabsLayout() {
         options={{
           title: "Ajustes",
           tabBarIcon: ({ color }) => <Engranaje color={color}></Engranaje>,
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitle: () => (
+            <Text className="text-3xl font-bold text-cyan-700 ml-3">
+              Ajustes
+            </Text>
+          ),
         }}
       />
       <Tabs.Screen
