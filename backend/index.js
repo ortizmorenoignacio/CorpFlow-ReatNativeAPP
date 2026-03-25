@@ -4,11 +4,11 @@ const Usuarios = require("./Models/usuario");
 const Reuniones = require("./Models/reuniones");
 const Coorporaciones = require("./Models/corporaciones");
 const express = require("express");
-
+const cors = require("cors");
 const notFound = require("./middelware/notFound");
 const handleError = require("./middelware/handleError");
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 const PORT = 3001;
 app.listen(PORT, "0.0.0.0", () => {});

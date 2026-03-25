@@ -52,3 +52,11 @@ export const InterrrogacionIcon = (props) => (
 export const CloudIcon = (props) => (
   <FontAwesome5 name="cloud-sun" size={24} color="black" />
 );
+
+export const ChevronIcon = (props) => (
+  <FontAwesome5 name="chevron-right" size={18} color="#94a3b8" />
+);
+
+export const Usercog = (props) => (
+  <FontAwesome5 name="user-cog" size={24} color={props.color} />
+);

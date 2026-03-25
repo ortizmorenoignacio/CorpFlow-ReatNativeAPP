@@ -256,3 +256,36 @@ exports.obtenerTareasUsuarioCorporacion = async (request, response) => {
     });
   }
 };
+
+exports.cambiarContraseña = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const { contraseñaActual, contraseñaNueva } = request.body;
+
+    const usuario = await Usuario.findById(id);
+
+    const esCorrecta = await bcrypt.compare(
+      contraseñaActual,
+      usuario.contraseña,
+    );
+
+    if (!esCorrecta) {
+      return response
+        .status(400)
+        .json({ error: "La contraseña actual es incorrecta" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const Encriptada = await bcrypt.hash(contraseñaNueva, salt);
+
+    usuario.contraseña = Encriptada;
+    await usuario.save();
+
+    response.json({ mensaje: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .json({ error: "Error interno al cambiar la contraseña" });
+  }
+};

@@ -63,7 +63,6 @@ export default function ScreenPerfil() {
               <Text className="font-semibold text-base">{user.genero}</Text>
             </View>
           </View>
-          <View className="h-[1px] bg-slate-200 w-full" />
         </View>
         <View className=" bg-white border border-slate-200 rounded-2xl mt-5">
           <View className="flex-row mb-3 mt-3">

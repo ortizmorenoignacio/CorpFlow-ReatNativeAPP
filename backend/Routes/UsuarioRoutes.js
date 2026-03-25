@@ -20,3 +20,5 @@ router.get("/:id/membresias", usuarioController.obtenerMembresiasUsuario);
   usuarioController.obtenerTareasUsuarioCorporacion,
 ),
   (module.exports = router));
+
+router.put("/:id/contrasena", usuarioController.cambiarContraseña);

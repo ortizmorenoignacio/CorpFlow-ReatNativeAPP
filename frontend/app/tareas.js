@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
-import { obtenerTareas } from "../src/api/services/tareaService";
+import { Pressable, Text, View } from "react-native";
+
 import { Screen } from "../src/components/Screen";
-import { router, Stack, Tabs, useRouter } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useAuth } from "../src/context/AuthContext";
 import { useCorporacion } from "../src/context/CorporacionContext";
 import { TareasList } from "../src/components/TareasList";

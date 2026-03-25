@@ -49,6 +49,7 @@ export default function ChatScreen() {
 
     setMensajes([msg, ...mensajes]); //Añade los mensajes al princio porque la lista esta invertida
     setNuevoMensaje(""); //Limpia el input
+
     //LLamada a la API
 
     try {

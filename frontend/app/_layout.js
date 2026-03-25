@@ -2,6 +2,7 @@ import { Text, View } from "react-native";
 import { router, Stack, useRouter, useSegments } from "expo-router";
 import { AuthProvider, useAuth } from "../src/context/AuthContext";
 import { useEffect } from "react";
+import "../global.css";
 import {
   CorporacionProvider,
   useCorporacion,
