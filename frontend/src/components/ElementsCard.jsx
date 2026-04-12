@@ -8,7 +8,7 @@ export function ElementsCard({ corporacionId, chatId }) {
       name: "Calendario",
       bg: "#E3F2FD",
       color: "#2196F3",
-      link: `/calendario/${corporacionId}`,
+      link: `/calendario/`,
       icono: "calendar-alt",
     },
     {

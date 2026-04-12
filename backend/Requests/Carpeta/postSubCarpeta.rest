@@ -2,8 +2,8 @@ POST  http://localhost:3001/api/carpetas/
 Content-Type: application/json
 
 {
-    "nombre": "Politicas Actualizadas",
-    "carpetaPadre": "6960d883dc40ffccea3e03ee"
+    "nombre": "Contrataciones 2026",
+    "carpetaPadre": "69d93b99d32b5d2a2ff5856d"
     
     
 }

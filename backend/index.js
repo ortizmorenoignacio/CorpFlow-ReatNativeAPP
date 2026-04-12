@@ -10,10 +10,6 @@ const handleError = require("./middelware/handleError");
 const app = express();
 app.use(cors());
 app.use(express.json());
-const PORT = 3001;
-app.listen(PORT, "0.0.0.0", () => {});
-
-console.log("CORPFLOW running on port ", PORT);
 
 const usuarioRoutes = require("./Routes/UsuarioRoutes");
 const reunionRoutes = require("./Routes/ReunionesRoutes");
@@ -42,4 +38,9 @@ app.use("/api/mensajes", mensajeRoutes);
 app.use(notFound);
 app.use(handleError);
 
-//middelware validators controlladores
+//Puertos
+
+const PORT = 3001;
+app.listen(PORT, "0.0.0.0", () => {});
+
+console.log("CORPFLOW running on port ", PORT);

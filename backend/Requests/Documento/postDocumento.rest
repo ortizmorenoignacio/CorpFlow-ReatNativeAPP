@@ -2,8 +2,8 @@ POST  http://localhost:3001/api/documentos/
 Content-Type: application/json
 
 {
-    "nombre": "Politicas",
+    "nombre": "Plantilla 2026",
     "formato": "docx",
-    "carpeta": "6960de5df4b41134c463e219"
+    "carpeta": "69d93befd32b5d2a2ff58576"
     
 }

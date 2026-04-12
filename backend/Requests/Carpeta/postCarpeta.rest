@@ -2,7 +2,7 @@ POST  http://localhost:3001/api/carpetas/
 Content-Type: application/json
 
 {
-    "nombre": "Politicas Internas",
-    "corporacion": "695a45494425fe76fe5a4f6b"
+    "nombre": "Recursos Humanos",
+    "corporacion": "69af0b80f90c821110c52cdc"
     
 }
