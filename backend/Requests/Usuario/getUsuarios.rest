@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/usuario/
+GET http://localhost:3001/api/usuario?correo=empresario@gmail.com

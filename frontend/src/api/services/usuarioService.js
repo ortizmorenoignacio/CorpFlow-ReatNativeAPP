@@ -28,3 +28,15 @@ export const cambiarContraseña = async (
     contraseñaNueva,
   });
 };
+
+export const actualizarUsuario = async (userId, datos) => {
+  return await put(`/api/usuario/${userId}`, datos);
+};
+
+export const crearMembresia = async (datos) => {
+  return await post("/api/membresias", datos);
+};
+
+export const buscarUsuarioCorreo = async (correo) => {
+  return await get(`/api/usuario?correo=${correo}`);
+};

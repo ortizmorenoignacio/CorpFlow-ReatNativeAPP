@@ -29,7 +29,7 @@ export const CrearCarpetaModal = ({
 
   return (
     <Modal visible={visible} transparent animationType="slide">
-      <View className="flex-1 justify-center items-center bg-slate-500/50 px-6">
+      <View className="flex-1 justify-center items-center bg-slate-500 px-6">
         <View bg-white w-full rounded-3xl p-6 shadow-xl>
           <Text className="text-xl font-bold text-slate-800 mb-4">
             Nueva Carpeta

@@ -11,7 +11,11 @@ export const CorporacionProvider = ({ children }) => {
 
   return (
     <corporacionContext.Provider
-      value={{ corporacionActiva, seleccionarCorporacion }}
+      value={{
+        corporacionActiva,
+        setCorporacionActiva,
+        seleccionarCorporacion,
+      }}
     >
       {children}
     </corporacionContext.Provider>

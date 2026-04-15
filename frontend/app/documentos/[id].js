@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import {
   crearCarpeta,
   obtenerContenidoCarpeta,
+  subirArchivo,
 } from "../../src/api/services/documentosService";
+import * as DocumentPicker from "expo-document-picker";
 import { Screen } from "../../src/components/Screen";
 import {
   ActivityIndicator,
@@ -49,6 +51,28 @@ export default function CarpetaDetails() {
       cargarContenido();
     } catch (error) {
       Alert.alert("Error", "No se pudo crear la carpeta", error);
+    }
+  };
+
+  const handleSubirArchivo = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "*/*",
+        copyToCacheDirectory: true,
+      });
+
+      if (!result.canceled) {
+        setLoading(true);
+        const archivo = result.assets[0];
+
+        await subirArchivo(archivo, corporacionActiva.id, id);
+        Alert.alert("Éxito", "Archivo subido correctamente");
+        cargarContenido();
+      }
+    } catch (error) {
+      Alert.alert("Error", "No se pudo subir el archivo", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -133,7 +157,17 @@ export default function CarpetaDetails() {
       ></CrearCarpetaModal>
 
       <Pressable
-        onPress={() => setModalVisible(true)}
+        onPress={() => {
+          Alert.alert(
+            "¿Qué quieres añadir?",
+            "Selecciona una de las opciones",
+            [
+              { text: "Nueva Carpeta", onPress: () => setModalVisible(true) },
+              { text: "Subir Archivo", onPress: handleSubirArchivo },
+              { text: "Cancelar", style: "cancel" },
+            ],
+          );
+        }}
         className="absolute bottom-8 right-6 w-16 h-16 bg-cyan-700 rounded-full items-center justify-center shadow-lg"
       >
         <Feather name="plus" size={30} color="white"></Feather>

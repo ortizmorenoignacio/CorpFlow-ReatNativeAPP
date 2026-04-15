@@ -10,14 +10,15 @@ const moment = require("moment");
 
 exports.obtenerUsuarios = async (request, response) => {
   try {
+    const { correo } = request.query;
+
+    if (correo) {
+      const usuario = await Usuario.findOne({ correo: correo });
+      return response.status(200).json(usuario);
+    }
     const usuarios = await Usuario.find();
-    console.log("Colección que estoy leyendo:", Usuario.collection.name);
-    console.log("Cantidad encontrada:", usuarios.length);
-    console.log(
-      "IDs encontrados:",
-      usuarios.map((u) => u._id),
-    );
-    response.json(usuarios);
+
+    response.status(200).json(usuarios);
   } catch (error) {
     response.status(500).json({ error: "Error al obtener los usuarios" });
   }

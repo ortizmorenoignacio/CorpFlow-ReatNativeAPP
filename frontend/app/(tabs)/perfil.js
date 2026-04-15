@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { Screen } from "../../src/components/Screen";
 import {
   Calendar,
@@ -8,12 +8,13 @@ import {
   User,
 } from "../../src/components/Icons";
 import { useAuth } from "../../src/context/AuthContext";
+import { router } from "expo-router";
 export default function ScreenPerfil() {
   const { user } = useAuth();
 
   const formatearFecha = (fechaISO) => {
     const fecha = new Date(fechaISO);
-    const dia = fecha.getDate(toString().padStart(2, "0"));
+    const dia = fecha.getDate().toString().padStart(2, "0");
     const mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
     const anio = fecha.getFullYear().toString();
     return `${dia}-${mes}-${anio}`;
@@ -85,11 +86,14 @@ export default function ScreenPerfil() {
             </View>
           </View>
 
-          <View className=" mb-3 mt-3">
-            <Text className="text-center text-cyan-700 font-semibold">
+          <Pressable
+            onPress={() => router.push("/editPerfil")}
+            className="py-4 active:bg-slate-50 rounded-b-2xl"
+          >
+            <Text className="text-center text-cyan-700 font-bold text-base">
               Editar Datos
             </Text>
-          </View>
+          </Pressable>
         </View>
       </View>
     </Screen>

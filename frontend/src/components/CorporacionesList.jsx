@@ -51,6 +51,16 @@ export const CorporacionesList = ({ userId }) => {
             logo={item.corporacion?.logo}
             rol={item.rol}
             onPress={() => handleSelect(item)}
+            onEdit={() =>
+              router.push({
+                pathname: "/editCorporacion",
+                params: {
+                  id: item.corporacion._id,
+                  nombre: item.corporacion.nombre,
+                  logo: item.corporacion.logo,
+                },
+              })
+            }
           ></MembresiaCard>
         )}
       ></FlatList>

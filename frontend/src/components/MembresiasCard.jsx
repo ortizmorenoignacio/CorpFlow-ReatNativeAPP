@@ -1,6 +1,7 @@
+import { Feather } from "@expo/vector-icons";
 import { Image, Pressable, Text, View } from "react-native";
 
-export const MembresiaCard = ({ nombre, logo, rol, onPress }) => {
+export const MembresiaCard = ({ nombre, logo, rol, onPress, onEdit }) => {
   return (
     <Pressable
       onPress={onPress}
@@ -28,6 +29,14 @@ export const MembresiaCard = ({ nombre, logo, rol, onPress }) => {
           </Text>
         )}
       </View>
+
+      {/* BOTÓN EDITAR SOLO PARA ADMINS */}
+
+      {rol.toUpperCase() === "ADMIN" && (
+        <Pressable onPress={() => onEdit()}>
+          <Feather name="edit-3" size={20} color="#0e7490"></Feather>
+        </Pressable>
+      )}
     </Pressable>
   );
 };

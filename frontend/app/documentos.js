@@ -84,7 +84,7 @@ export default function DocumentosScreen() {
         datos();
       }
     } catch (error) {
-      Alert.alert("Error", "No se pudo subir el archivo");
+      Alert.alert("Error", "No se pudo subir el archivo", error);
     } finally {
       setLoading(false);
     }

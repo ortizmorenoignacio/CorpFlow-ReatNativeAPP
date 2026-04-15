@@ -4,7 +4,6 @@ import { useAuth } from "../../src/context/AuthContext";
 import { CorporacionesList } from "../../src/components/CorporacionesList";
 import { router } from "expo-router";
 
-// ¡IMPORTANTE! Tiene que ser 'export default'
 export default function CoorporacionesScreen() {
   const { user } = useAuth();
   return (
