@@ -1,7 +1,8 @@
 const { request, response } = require("express");
 const Usuario = require("../Models/usuario");
 const Tareas = require("../Models/tareas");
-
+const Reunion = require("../Models/reuniones");
+const Documento = require("../Models/documentos");
 const Membresia = require("../Models/membresia");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
@@ -145,10 +146,17 @@ exports.actualizarUsuario = async (request, response) => {
 exports.eliminarUsuarioID = async (request, response) => {
   try {
     const { id } = request.params;
+    const borrar = await Usuario.findById(id);
+    await Promise.all([
+      Reunion.updateMany({ asistentes: id }, { $pull: { asistentes: id } }),
+      Tareas.deleteMany({ _id: { $in: borrar.tareas } }),
+      Membresia.deleteMany({ _id: { $in: borrar.membresias } }),
+      Documento.deleteMany({ _id: { $in: borrar.documentos } }),
+    ]);
     await Usuario.findByIdAndDelete(id);
     response.json({ Info: "Usuario borrado correctamente" });
   } catch (error) {
-    response.status(500).json({ error: "Error al borrar usuario" });
+    response.status(500).json({ error: "Error al borrar usuario", error });
   }
 };
 

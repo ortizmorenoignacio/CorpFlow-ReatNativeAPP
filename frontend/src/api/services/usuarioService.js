@@ -1,5 +1,5 @@
 // src/api/services/usuarioService.js
-import { get, post, put } from "../helpers/request";
+import { borrar, get, post, put } from "../helpers/request";
 
 // URL Final: http://10.0.2.2:3001/api/usuario
 export const obtenerUsuarios = async () => {
@@ -39,4 +39,8 @@ export const crearMembresia = async (datos) => {
 
 export const buscarUsuarioCorreo = async (correo) => {
   return await get(`/api/usuario?correo=${correo}`);
+};
+
+export const eliminarUsuarioID = async (id) => {
+  return await borrar(`/api/usuario/${id}`);
 };

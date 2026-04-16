@@ -37,3 +37,13 @@ export const put = async (url, data) => {
     throw error;
   }
 };
+
+export const borrar = async (url) => {
+  try {
+    const response = await client.delete(url);
+    return response.data;
+  } catch (error) {
+    console.error(`Error en el DELETE ${url}`, error);
+    throw error;
+  }
+};

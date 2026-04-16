@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { useAuth } from "../src/context/AuthContext";
 import { Screen } from "../src/components/Screen";
+import { eliminarUsuarioID } from "../src/api/services/usuarioService";
 
 export default function GestionCuenta() {
   const { user, signOut } = useAuth(); // Asumo que tienes signOut en tu AuthContext
@@ -15,7 +16,7 @@ export default function GestionCuenta() {
           text: "Eliminar",
           style: "destructive",
           onPress: async () => {
-            // await apiEliminarUsuario(user._id);
+            await eliminarUsuarioID(user._id);
             signOut();
           },
         },

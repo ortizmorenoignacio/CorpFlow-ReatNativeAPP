@@ -7,6 +7,7 @@ export const TareaCard = ({
   estadoTarea,
   prioridad,
   onToggle,
+  vencida,
 }) => {
   const getPrioridad = (prioridad) => {
     if (!prioridad) return { bg: "bg-sky-100", text: "text-sky-500" };
@@ -37,7 +38,9 @@ export const TareaCard = ({
       >
         {nombre}
       </Text>
-      <Text className="w-16  text-slate-500 text-xs font-medium">
+      <Text
+        className={`w-16  text-slate-500 text-xs font-medium ${vencida && !estadoTarea ? "text-red-600 font-bold" : "text-slate-500"}`}
+      >
         {fechaVencimiento}
       </Text>
       <View className={`${colores.bg} px-3 py-1 rounded-full mx-2`}>

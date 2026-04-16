@@ -19,6 +19,21 @@ export const TareasList = ({ userId, corporacionId }) => {
     const anio = fecha.getFullYear().toString().slice(-2);
     return `${dia}-${mes}-${anio}`;
   };
+
+  const vencida = (fechaISO) => {
+    if (!fechaISO) return false;
+    const fechaVencimiento = new Date(fechaISO);
+    const hoy = new Date();
+    return fechaVencimiento < hoy;
+  };
+
+  const tareasFiltradas = tareas.filter((tarea) => {
+    const vencidas = vencida(tarea.fechaVencimiento);
+
+    if (tarea.estadoTarea && vencidas) return false;
+
+    return true;
+  });
   useEffect(() => {
     if (!userId || !corporacionId) {
       return;
@@ -84,13 +99,14 @@ export const TareasList = ({ userId, corporacionId }) => {
           </Text>
         </View>
         <FlatList
-          data={tareas}
+          data={tareasFiltradas}
           keyExtractor={(item) => item._id}
           contentContainerStyle={{ paddingBottom: 100 }}
           renderItem={({ item }) => (
             <TareaCard
               nombre={item.nombre}
               fechaVencimiento={formatearFecha(item.fechaVencimiento)}
+              vencida={vencida(item.fechaVencimiento)}
               estadoTarea={item.estadoTarea}
               prioridad={item.prioridad}
               onToggle={() => handleEstado(item._id, item.estadoTarea)}

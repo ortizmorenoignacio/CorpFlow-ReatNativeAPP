@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, ActivityIndicator, Image } from "react-native";
 import { Screen } from "../../src/components/Screen";
 import {
   Calendar,
@@ -11,7 +11,9 @@ import { useAuth } from "../../src/context/AuthContext";
 import { router } from "expo-router";
 export default function ScreenPerfil() {
   const { user } = useAuth();
-
+  if (!user) {
+    return <ActivityIndicator size="large" />;
+  }
   const formatearFecha = (fechaISO) => {
     const fecha = new Date(fechaISO);
     const dia = fecha.getDate().toString().padStart(2, "0");
@@ -21,6 +23,15 @@ export default function ScreenPerfil() {
   };
   return (
     <Screen>
+      <View className="items-center mt-6">
+        <Image
+          source={{
+            uri: user.fotoPerfil || "https://ui-avatars.com/api/?name=",
+          }}
+          className="w-24 h-24 rounded-full border-2 border-slate-200"
+        />
+        <Text className="text-xl font-bold mt-2">{user.nombre}</Text>
+      </View>
       <View className="px-3">
         <View className=" bg-white border border-slate-200 rounded-2xl mt-5">
           <View className="flex-row mb-3 mt-3">

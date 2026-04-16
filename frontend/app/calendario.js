@@ -7,7 +7,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Screen } from "../src/components/Screen";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
+import { obtenerReunionesUsuarioCorporacion } from "../src/api/services/reunionesService";
 import {
   CalendarProvider,
   ExpandableCalendar,
@@ -81,27 +82,38 @@ export default function CalendarioScreen() {
     const cargarDatos = async () => {
       try {
         setLoading(true);
-        const datos = await obtenerTareasUsuarioCorporacion(
-          user._id,
-          corporacionActiva.id,
-        );
+        //Llamadas a ambos servicios
+        const [tareas, reuniones] = await Promise.all([
+          obtenerTareasUsuarioCorporacion(user._id, corporacionActiva.id),
+          obtenerReunionesUsuarioCorporacion(user._id, corporacionActiva.id), // Tu nueva función
+        ]);
 
+        //Normalizamos
+        const eventos = [
+          ...tareas.map((t) => ({
+            ...t,
+            tipo: "tarea",
+            fecha: t.fechaVencimiento,
+          })),
+          ...reuniones.map((r) => ({
+            ...r,
+            tipo: "reunion",
+            fecha: r.fecha_Inicio,
+          })),
+        ];
         const agrupado = {};
         const puntosCalendario = {};
 
-        datos.forEach((tarea) => {
-          if (!tarea.fechaVencimiento) return;
+        eventos.forEach((e) => {
+          if (!e.fecha) return;
+          const fecha = e.fecha.split("T")[0];
 
-          const fechaCalendario = tarea.fechaVencimiento.split("T")[0];
+          if (!agrupado[fecha]) agrupado[fecha] = [];
+          agrupado[fecha].push(e);
 
-          if (!agrupado[fechaCalendario]) {
-            agrupado[fechaCalendario] = [];
-          }
-          agrupado[fechaCalendario].push(tarea);
-
-          puntosCalendario[fechaCalendario] = {
+          puntosCalendario[fecha] = {
             marked: true,
-            dotColor: tarea.estadoTarea ? "#059669" : "#0ea5e9", // Verde si está lista, cyan si está pendiente
+            dotColor: e.tipo === "reunion" ? "#f59e0b" : "#0ea5e9",
           };
         });
 
@@ -157,17 +169,16 @@ export default function CalendarioScreen() {
   };
 
   const renderItem = useCallback(({ item }) => {
-    // 1. Sacamos la hora de la fecha de vencimiento (ej: "10:30")
-    let horaFormateada = "Sin hora";
-    if (item.fechaVencimiento) {
-      const fechaObj = new Date(item.fechaVencimiento);
-      horaFormateada = fechaObj.toLocaleTimeString("es-ES", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    }
+    const esReunion = item.tipo === "reunion";
 
-    // 2. Ajustamos los colores si la tarea está completada
+    // --- LÓGICA PARA TAREAS ---
+    const horaFormateada = item.fechaVencimiento
+      ? new Date(item.fechaVencimiento).toLocaleTimeString("es-ES", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "Sin hora";
+
     const colorBorde = item.estadoTarea
       ? "border-emerald-500"
       : "border-cyan-500";
@@ -175,31 +186,54 @@ export default function CalendarioScreen() {
       ? "text-emerald-600 bg-emerald-50"
       : "text-cyan-600 bg-cyan-50";
 
+    // --- LÓGICA PARA REUNIONES ---
+    const horaReunion = item.horaInicio
+      ? new Date(item.horaInicio).toLocaleTimeString("es-ES", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "";
+
     return (
       <TouchableOpacity
-        className={`bg-white p-4 mx-4 my-2 rounded-xl border-l-4 ${colorBorde} shadow-sm`}
-        // Al tocar normal, ves un resumen.
-        onPress={() =>
-          Alert.alert(item.nombre, `Prioridad: ${item.prioridad || "Normal"}`)
+        className={`bg-white p-4 mx-4 my-2 rounded-xl border-l-4 ${esReunion ? "border-amber-500" : colorBorde} shadow-sm`}
+        onPress={() => {
+          if (!esReunion)
+            Alert.alert(
+              item.nombre,
+              `Prioridad: ${item.prioridad || "Normal"}`,
+            );
+          else
+            Alert.alert(item.nombre, `Reunión programada a las ${horaReunion}`);
+        }}
+        onLongPress={() =>
+          !esReunion && handleEstado(item._id, item.estadoTarea)
         }
-        // Al dejar pulsado, cambia el estado (completada/pendiente)
-        onLongPress={() => handleEstado(item._id, item.estadoTarea)}
       >
         <View className="flex-row justify-between items-center mb-1">
           <Text
-            className={`text-lg font-bold ${item.estadoTarea ? "text-slate-400 line-through" : "text-slate-800"}`}
+            className={`text-lg font-bold ${!esReunion && item.estadoTarea ? "text-slate-400 line-through" : "text-slate-800"}`}
             numberOfLines={1}
           >
             {item.nombre}
           </Text>
-          <Text
-            className={`text-sm font-semibold px-2 py-1 rounded-md ${colorCajitaTexto}`}
-          >
-            {horaFormateada}
-          </Text>
+          {esReunion ? (
+            <Text className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded">
+              REUNIÓN
+            </Text>
+          ) : (
+            <Text
+              className={`text-sm font-semibold px-2 py-1 rounded-md ${colorCajitaTexto}`}
+            >
+              {horaFormateada}
+            </Text>
+          )}
         </View>
+
         <Text className="text-slate-500 capitalize">
-          Prioridad: {item.prioridad || "No definida"}
+          {esReunion
+            ? `Hora: ${horaReunion}`
+            : `Prioridad: ${item.prioridad || "No definida"}`}
         </Text>
       </TouchableOpacity>
     );
@@ -254,6 +288,12 @@ export default function CalendarioScreen() {
             />
           </CalendarProvider>
         )}
+        <TouchableOpacity
+          onPress={() => router.push("/crearReunion")}
+          className="absolute bottom-8 right-6 w-14 h-14 bg-amber-500 rounded-full items-center justify-center shadow-lg"
+        >
+          <Text className="text-white text-3xl font-bold">+</Text>
+        </TouchableOpacity>
       </View>
     </Screen>
   );

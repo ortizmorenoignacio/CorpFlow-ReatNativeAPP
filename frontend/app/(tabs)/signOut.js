@@ -6,12 +6,11 @@ import {
   ActivityIndicator,
   Modal,
 } from "react-native";
-import { Screen } from "../../src/components/Screen"; // O tu componente contenedor
+
 import { useState } from "react";
 import { useAuth } from "../../src/context/AuthContext";
 import { useRouter } from "expo-router";
 
-// ¡IMPORTANTE! Tiene que ser 'export default'
 export default function LogoutScreen() {
   const { signOut } = useAuth();
   const [cargando, setCargando] = useState(false);
