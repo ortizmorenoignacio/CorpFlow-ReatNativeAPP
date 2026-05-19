@@ -2,12 +2,12 @@ POST  http://localhost:3001/api/usuario/
 Content-Type: application/json
 
 {
-    "nombre" : "Julio",
-    "correo" : "julio123@gmail.com",
-    "telefono": "623435361",
+    "nombre" : "Julia",
+    "correo" : "julia@gmail.com",
+    "telefono": "62343535",
     "fotoPerfil": "https://example.com/foto.jpg",
     "fechaNacimiento": "1990-05-15",
-    "contraseña": "julito",
-    "dni": "78654934D",
-    "genero": "HOMBRE"
+    "contraseña": "julita",
+    "dni": "78654934U",
+    "genero": "MUJER"
 }

@@ -95,11 +95,7 @@ export default function CrearTarea() {
       Alert.alert("¡Éxito!", "La tarea se ha creado correctamente", [
         {
           text: "Genial",
-          onPress: () =>
-            router.replace({
-              pathname: "/tareas",
-              params: { nuevaTarea: true },
-            }), // Nos devuelve automáticamente a la lista
+          onPress: () => router.back(),
         },
       ]);
     } catch (error) {

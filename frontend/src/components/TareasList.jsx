@@ -5,12 +5,13 @@ import { TareaCard } from "./TareasCard";
 import { obtenerTareasUsuarioCorporacion } from "../api/services/usuarioService";
 import { aactualizarEstadoTarea } from "../api/services/tareaService";
 import { useLocalSearchParams } from "expo-router";
-
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 export const TareasList = ({ userId, corporacionId }) => {
   const [tareas, setTareas] = useState([]);
   const [loading, setLoading] = useState(true);
   //Fromateo fecha
-  const params = useLocalSearchParams();
+
   const formatearFecha = (fechaISO) => {
     if (!fechaISO) return "sin fecha";
     const fecha = new Date(fechaISO);
@@ -34,26 +35,30 @@ export const TareasList = ({ userId, corporacionId }) => {
 
     return true;
   });
-  useEffect(() => {
-    if (!userId || !corporacionId) {
-      return;
-    }
-    const cargarDatos = async () => {
-      try {
-        setLoading(true);
-        const datos = await obtenerTareasUsuarioCorporacion(
-          userId,
-          corporacionId,
-        );
-        setTareas(datos);
-      } catch (error) {
-        console.error("Error cargando tareas", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    cargarDatos();
-  }, [userId, corporacionId, params.nuevaTarea]);
+  useFocusEffect(
+    useCallback(() => {
+      if (!userId || !corporacionId) return;
+
+      const cargarDatos = async () => {
+        try {
+          setLoading(true);
+
+          const datos = await obtenerTareasUsuarioCorporacion(
+            userId,
+            corporacionId,
+          );
+
+          setTareas(datos);
+        } catch (error) {
+          console.error("Error cargando tareas", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      cargarDatos();
+    }, [userId, corporacionId]),
+  );
   //Manejo actualizar estado tarea
 
   const handleEstado = async (idTarea, estadoActual) => {

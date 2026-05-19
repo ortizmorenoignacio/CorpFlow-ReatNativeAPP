@@ -23,7 +23,6 @@ export const post = async (url, data) => {
     const response = await client.post(url, data);
     return response.data;
   } catch (error) {
-    console.error(`Error en el POST ${url}`, error);
     throw error;
   }
 };
@@ -33,7 +32,6 @@ export const put = async (url, data) => {
     const response = await client.put(url, data);
     return response.data;
   } catch (error) {
-    console.error(`Error en el PUT ${url}`, error);
     throw error;
   }
 };

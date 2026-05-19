@@ -120,7 +120,13 @@ exports.actualizarChat = async (request, response) => {
 exports.obtenerMensajes = async (request, response) => {
   try {
     const { id } = request.params;
-    const chat = await Chat.findById(id).populate("mensajes");
+    const chat = await Chat.findById(id).populate({
+      path: "mensajes",
+      populate: {
+        path: "usuario",
+        select: "nombre",
+      },
+    });
     const mensajes = chat.mensajes;
 
     if (chat) {

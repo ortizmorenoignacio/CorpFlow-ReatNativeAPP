@@ -108,9 +108,16 @@ exports.crearUsuario = async (request, response) => {
     const savedUser = await newUser.save();
     response.status(201).json(savedUser);
   } catch (error) {
-    response
-      .status(500)
-      .json({ error: "Error al crear usuario", detalle: error.message });
+    if (error.code === 11000) {
+      const campoDuplicado = Object.keys(error.keyValue)[0];
+
+      return response.status(400).json({
+        error: `El ${campoDuplicado} ya está registrado en el sistema.`,
+      });
+    }
+
+    console.error("Error al crear usuario:", error);
+    response.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
@@ -169,13 +176,13 @@ exports.login = async (request, response) => {
     const usuario = await Usuario.findOne({ correo: email });
 
     if (!usuario) {
-      return res.status(401).json({ error: "Credenciales no válidas" });
+      return response.status(401).json({ error: "Credenciales no válidas" });
     }
 
     const passwordValid = await bcrypt.compare(password, usuario.contraseña);
 
     if (!passwordValid) {
-      return res.status(401).json({ error: "Credenciales inválidas" });
+      return response.status(401).json({ error: "Credenciales inválidas" });
     }
 
     const token = crypto.randomBytes(20).toString("hex");

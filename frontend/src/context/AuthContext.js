@@ -68,10 +68,14 @@ export const AuthProvider = ({ children }) => {
       //Borramos el estado
       setUser(null);
       setToken(null);
-
       //Borramos del movil
 
-      await AsyncStorage.multiRemove(["user", "token", "expiracion"]);
+      await AsyncStorage.multiRemove([
+        "user",
+        "token",
+        "expiracion",
+        "corporacionActiva",
+      ]);
     } catch (error) {
       console.error("Error cerrando sesión:", error);
     }

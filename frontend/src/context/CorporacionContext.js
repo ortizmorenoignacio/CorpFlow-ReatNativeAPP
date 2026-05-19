@@ -9,12 +9,17 @@ export const CorporacionProvider = ({ children }) => {
     setCorporacionActiva(corp);
   };
 
+  const limpiarCorporacion = () => {
+    setCorporacionActiva(null);
+  };
+
   return (
     <corporacionContext.Provider
       value={{
         corporacionActiva,
         setCorporacionActiva,
         seleccionarCorporacion,
+        limpiarCorporacion,
       }}
     >
       {children}

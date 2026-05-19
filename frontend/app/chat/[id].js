@@ -67,17 +67,45 @@ export default function ChatScreen() {
     }
   };
 
-  const renderItem = ({ item }) => (
-    <View
-      className={`p-3 m-2 rounded-2xl max-w-[80%] ${item.usuario === user._id ? "bg-cyan-600 self-end" : "bg-white self-start border border-slate-200"}`}
-    >
-      <Text
-        className={item.usuario === user._id ? "text-white" : "text-slate-800"}
+  const renderItem = ({ item }) => {
+    // Comprobamos si el ID del usuario coincide (manejando si es objeto o string)
+    const usuarioId = item.usuario?._id || item.usuario;
+    const esMio = usuarioId === user._id;
+
+    return (
+      <View
+        className={`p-3 m-2 rounded-2xl max-w-[85%] ${
+          esMio
+            ? "bg-cyan-700 self-end rounded-tr-none"
+            : "bg-white self-start border border-slate-200 rounded-tl-none shadow-sm"
+        }`}
       >
-        {item.contenido}
-      </Text>
-    </View>
-  );
+        {/* Mostramos el nombre si no es mío y si el populate funcionó */}
+        {!esMio && (
+          <Text className="text-xs font-bold text-cyan-800 mb-1">
+            {item.usuario?.nombre || "Usuario"}
+          </Text>
+        )}
+
+        <Text
+          className={
+            esMio ? "text-white text-[15px]" : "text-slate-800 text-[15px]"
+          }
+        >
+          {item.contenido}
+        </Text>
+
+        <Text
+          className={`text-[10px] mt-1 text-right ${esMio ? "text-cyan-100" : "text-slate-400"}`}
+        >
+          {new Date(item.fechaHora).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </Text>
+      </View>
+    );
+  };
 
   if (cargando) {
     return (

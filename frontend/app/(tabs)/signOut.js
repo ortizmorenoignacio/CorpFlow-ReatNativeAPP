@@ -10,15 +10,16 @@ import {
 import { useState } from "react";
 import { useAuth } from "../../src/context/AuthContext";
 import { useRouter } from "expo-router";
-
+import { useCorporacion } from "../../src/context/CorporacionContext";
 export default function LogoutScreen() {
   const { signOut } = useAuth();
+  const { setCorporacionActiva } = useCorporacion();
   const [cargando, setCargando] = useState(false);
   const router = useRouter();
   const manejoSignOut = async () => {
     try {
       setCargando(true);
-
+      setCorporacionActiva(null);
       await signOut();
       setTimeout(() => {
         router.replace("/login");

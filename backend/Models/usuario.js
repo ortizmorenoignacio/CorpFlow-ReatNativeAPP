@@ -3,7 +3,13 @@ const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema({
   nombre: String,
-  correo: String,
+  correo: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  },
   telefono: String,
   fotoPerfil: String,
   fechaNacimiento: Date,

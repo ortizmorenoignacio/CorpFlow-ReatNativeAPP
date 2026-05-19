@@ -26,7 +26,7 @@ export default function EditCorporacion() {
   const [nombre, setNombre] = useState(params.nombre);
   const [nuevoUsuario, setNuevoUsuario] = useState("");
   const [logo, setLogo] = useState(params.logo);
-
+  const corporacionId = params.id;
   const cambiarFoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -49,17 +49,21 @@ export default function EditCorporacion() {
         logo: logo,
       };
 
-      const actualizado = await editarCorporacion(corporacionActiva.id, datos);
+      const actualizado = await editarCorporacion(corporacionId, datos);
 
-      setCorporacionActiva(actualizado);
-      router.back();
+      if (corporacionActiva.id === corporacionId) {
+        setCorporacionActiva({
+          ...corporacionActiva,
+          ...actualizado,
+        });
+      }
+      Alert.alert("Éxito", "Corporación actualizada correctamente", [
+        { text: "OK", onPress: () => router.back() },
+      ]);
     } catch (error) {
       console.error("Error al actualizar la corporación:", error);
       Alert.alert("Error", "No se pudieron guardar los cambios");
     }
-    // 2. Si hay algo en 'nuevoUsuario' (email o ID), llamar a la API de membresías
-    Alert.alert("Éxito", "Corporación actualizada");
-    router.back();
   };
 
   const handleAñadirMiembro = async () => {

@@ -24,6 +24,20 @@ export function Main() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const cargarResumen = async () => {
+      try {
+        setLoading(true);
+        const datos = await obtenerTareasUsuarioCorporacion(
+          user._id,
+          corporacionActiva.id,
+        );
+        setTareas(datos);
+      } catch (error) {
+        console.error("Error cargando resumen:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     if (user?._id && corporacionActiva?.id) {
       cargarResumen();
     }
@@ -31,25 +45,26 @@ export function Main() {
 
   useFocusEffect(
     useCallback(() => {
+      const cargarResumen = async () => {
+        try {
+          setLoading(true);
+          const datos = await obtenerTareasUsuarioCorporacion(
+            user._id,
+            corporacionActiva.id,
+          );
+          setTareas(datos);
+        } catch (error) {
+          console.error("Error cargando resumen:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
       if (user?._id && corporacionActiva?.id) {
         cargarResumen();
       }
     }, [user?._id, corporacionActiva?.id]),
   );
-  const cargarResumen = async () => {
-    try {
-      setLoading(true);
-      const datos = await obtenerTareasUsuarioCorporacion(
-        user._id,
-        corporacionActiva.id,
-      );
-      setTareas(datos);
-    } catch (error) {
-      console.error("Error cargando resumen:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+
   if (!corporacionActiva) {
     return (
       <Screen>

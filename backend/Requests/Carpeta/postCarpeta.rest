@@ -3,6 +3,6 @@ Content-Type: application/json
 
 {
     "nombre": "Recursos Humanos",
-    "corporacion": "69af0b80f90c821110c52cdc"
+    "corporacion": "6a09acec01b8ac02b9dc77a1"
     
 }

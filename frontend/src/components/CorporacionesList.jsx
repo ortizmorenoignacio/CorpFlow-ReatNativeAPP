@@ -4,7 +4,8 @@ import { ActivityIndicator, FlatList } from "react-native";
 import { MembresiaCard } from "./MembresiasCard";
 import { Screen } from "./Screen";
 import { useCorporacion } from "../context/CorporacionContext";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback } from "react";
 
 export const CorporacionesList = ({ userId }) => {
   const { seleccionarCorporacion } = useCorporacion();
@@ -12,22 +13,27 @@ export const CorporacionesList = ({ userId }) => {
   const [membresias, setMembresias] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!userId) return;
+  useFocusEffect(
+    useCallback(() => {
+      if (!userId) return;
 
-    const cargarDatos = async () => {
-      try {
-        const data = await obtenerMembresiasUsuario(userId);
-        setMembresias(data);
-      } catch (error) {
-        console.error("Error cargando corporaciones", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    cargarDatos();
-  }, [userId]);
+      const cargarDatos = async () => {
+        try {
+          setLoading(true);
 
+          const data = await obtenerMembresiasUsuario(userId);
+
+          setMembresias(data);
+        } catch (error) {
+          console.error("Error cargando corporaciones", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      cargarDatos();
+    }, [userId]),
+  );
   if (loading) return <ActivityIndicator className="mt-10" color="0e7490" />;
 
   const handleSelect = (item) => {

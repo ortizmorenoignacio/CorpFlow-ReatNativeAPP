@@ -13,7 +13,7 @@ export default function FormCrearReunion() {
   const [form, setForm] = useState({
     nombre: "",
     fecha_Inicio: new Date().toISOString(),
-    horaInicio: "",
+    horaInicio: new Date().toISOString(),
     asistentes: [user._id],
   });
 
@@ -26,7 +26,7 @@ export default function FormCrearReunion() {
       Alert.alert("Éxito", "Reunión creada correctamente");
       router.back();
     } catch (error) {
-      Alert.alert("Error", "No se pudo crear la reunión");
+      Alert.alert("Error", "No se pudo crear la reunión", error);
     }
   };
 

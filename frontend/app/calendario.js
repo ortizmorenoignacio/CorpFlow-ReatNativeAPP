@@ -7,7 +7,12 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Screen } from "../src/components/Screen";
-import { router, Stack, useLocalSearchParams } from "expo-router";
+import {
+  router,
+  Stack,
+  useLocalSearchParams,
+  useFocusEffect,
+} from "expo-router";
 import { obtenerReunionesUsuarioCorporacion } from "../src/api/services/reunionesService";
 import {
   CalendarProvider,
@@ -68,7 +73,6 @@ LocaleConfig.defaultLocale = "es";
 export default function CalendarioScreen() {
   const { user } = useAuth();
   const { corporacionActiva } = useCorporacion();
-  const params = useLocalSearchParams();
 
   const [agendaData, setAgendaData] = useState([]);
   const [markedDates, setMarkedDates] = useState({});
@@ -76,65 +80,71 @@ export default function CalendarioScreen() {
 
   const hoy = new Date().toISOString().split("T")[0];
 
-  useEffect(() => {
-    if (!user?._id || !corporacionActiva?.id) return;
+  useFocusEffect(
+    useCallback(() => {
+      if (!user?._id || !corporacionActiva?.id) return;
 
-    const cargarDatos = async () => {
-      try {
-        setLoading(true);
-        //Llamadas a ambos servicios
-        const [tareas, reuniones] = await Promise.all([
-          obtenerTareasUsuarioCorporacion(user._id, corporacionActiva.id),
-          obtenerReunionesUsuarioCorporacion(user._id, corporacionActiva.id), // Tu nueva función
-        ]);
+      const cargarDatos = async () => {
+        try {
+          setLoading(true);
 
-        //Normalizamos
-        const eventos = [
-          ...tareas.map((t) => ({
-            ...t,
-            tipo: "tarea",
-            fecha: t.fechaVencimiento,
-          })),
-          ...reuniones.map((r) => ({
-            ...r,
-            tipo: "reunion",
-            fecha: r.fecha_Inicio,
-          })),
-        ];
-        const agrupado = {};
-        const puntosCalendario = {};
+          const [tareas, reuniones] = await Promise.all([
+            obtenerTareasUsuarioCorporacion(user._id, corporacionActiva.id),
+            obtenerReunionesUsuarioCorporacion(user._id, corporacionActiva.id),
+          ]);
 
-        eventos.forEach((e) => {
-          if (!e.fecha) return;
-          const fecha = e.fecha.split("T")[0];
+          const eventos = [
+            ...tareas.map((t) => ({
+              ...t,
+              tipo: "tarea",
+              fecha: t.fechaVencimiento,
+            })),
+            ...reuniones.map((r) => ({
+              ...r,
+              tipo: "reunion",
+              fecha: r.fecha_Inicio,
+            })),
+          ];
 
-          if (!agrupado[fecha]) agrupado[fecha] = [];
-          agrupado[fecha].push(e);
+          const agrupado = {};
+          const puntosCalendario = {};
 
-          puntosCalendario[fecha] = {
-            marked: true,
-            dotColor: e.tipo === "reunion" ? "#f59e0b" : "#0ea5e9",
-          };
-        });
+          eventos.forEach((e) => {
+            if (!e.fecha) return;
 
-        const agendaFinal = Object.keys(agrupado)
-          .map((fecha) => ({
-            title: fecha,
-            data: agrupado[fecha],
-          }))
-          .sort((a, b) => new Date(a.title) - new Date(b.title));
+            const fecha = e.fecha.split("T")[0];
 
-        setAgendaData(agendaFinal);
-        setMarkedDates(puntosCalendario);
-      } catch (error) {
-        console.error("Error cargando tareas para el calendario", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+            if (!agrupado[fecha]) {
+              agrupado[fecha] = [];
+            }
 
-    cargarDatos();
-  }, [user?._id, corporacionActiva?.id, params.nuevaTarea]);
+            agrupado[fecha].push(e);
+
+            puntosCalendario[fecha] = {
+              marked: true,
+              dotColor: e.tipo === "reunion" ? "#f59e0b" : "#0ea5e9",
+            };
+          });
+
+          const agendaFinal = Object.keys(agrupado)
+            .map((fecha) => ({
+              title: fecha,
+              data: agrupado[fecha],
+            }))
+            .sort((a, b) => new Date(a.title) - new Date(b.title));
+
+          setAgendaData(agendaFinal);
+          setMarkedDates(puntosCalendario);
+        } catch (error) {
+          console.error("Error cargando calendario", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      cargarDatos();
+    }, [user?._id, corporacionActiva?.id]),
+  );
 
   // Función para cambiar el estado al hacer un "toque largo" en la tarjeta
   const handleEstado = async (idTarea, estadoActual) => {

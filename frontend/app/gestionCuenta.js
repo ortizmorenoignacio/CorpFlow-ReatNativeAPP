@@ -2,10 +2,10 @@ import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { useAuth } from "../src/context/AuthContext";
 import { Screen } from "../src/components/Screen";
 import { eliminarUsuarioID } from "../src/api/services/usuarioService";
+import { router } from "expo-router";
 
 export default function GestionCuenta() {
   const { user, signOut } = useAuth(); // Asumo que tienes signOut en tu AuthContext
-
   const handleEliminarCuenta = () => {
     Alert.alert(
       "¿Eliminar cuenta?",
@@ -17,7 +17,8 @@ export default function GestionCuenta() {
           style: "destructive",
           onPress: async () => {
             await eliminarUsuarioID(user._id);
-            signOut();
+            await signOut();
+            router.replace("/login");
           },
         },
       ],
